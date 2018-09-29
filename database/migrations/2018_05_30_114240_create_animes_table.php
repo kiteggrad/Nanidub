@@ -13,8 +13,6 @@ class CreateAnimesTable extends Migration
      */
     public function up()
     {
-        /** @todo добавить парные первичные ключи */
-
         Schema::create('countries', function (Blueprint $table) {
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';

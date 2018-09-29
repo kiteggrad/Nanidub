@@ -3,9 +3,11 @@
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Library\AnimeParser;
+//use Library\Requester\Requester;
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    \VideoGrabber\VideoGrabber::check();
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
@@ -17,26 +19,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 });
 
 Route::get('/test', function() {
+
     ini_set ('memory_limit', '10240M');//
     ini_set('max_execution_time', 100500);//
     $links = [
-        'https://online.anidub.com/anime/10517-figurnyy-kaleydoskop-ginban-kaleidoscope-01-iz-12.html'
-        //'https://online.anidub.com/anime_ova/anime_ona/10411-lazurnyy-strelok-ganvolt-armed-blue-gunvolt.html'
-        //'https://online.anidub.com/anime/unclosed/9071-inuyasha-inuyasha-10-iz-167.html'
-        //'https://online.anidub.com/anime_movie/10598-naruto-posledniy-film.html',
-        //'https://online.anidub.com/anime_movie/9516-mobilnyy-voin-zeta-gandam-novyy-perevod-film-pervyy-nasledniki-zvezd-mobile-suit-zeta-gundam-a-new-translation-heirs-to-the-stars-.html',
+        'https://online.anidub.com/anime/10193-duh-v-stalnoy-ploti-u-istokov-alternativnaya-arhitektura-koukaku-kidoutai-arise-alternative-architecture-04-iz-10.html',
     ];
     foreach ($links as $link) {
-        dump(new AnimeParser($link, $link));
+        //dump(new AnimeParser($link, $link));
+        //dump(getClient($link)->get($link));
+        //dump(get_headers($link));
     }
 
-//    $animes = AnimeParser::parseAllAnime();
-//    foreach ($animes as $anime) {
-//        $anime->addToDB();
-//    }
-
-
-
+    foreach (\App\EpisodeLink::all() as $episode_link) {
+        $testLinks[] = $episode_link->episodeLink;
+    }
 
 });
 
@@ -67,12 +64,3 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('/noAccess', function() {
 	return view('auth.noAccess');
 });
-
-/*
-
-UPDATE `nanidub`.parsed_animes, `parsed_nanidub`.`parsed_animes`
-SET `nanidub`.parsed_animes.created_at = `parsed_nanidub`.`parsed_animes`.created_at
-WHERE `nanidub`.`parsed_animes`.`name` = `parsed_nanidub`.`parsed_animes`.`name`
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');*/
